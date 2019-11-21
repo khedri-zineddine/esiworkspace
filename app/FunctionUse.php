@@ -1,0 +1,28 @@
+<?php
+
+namespace App;
+
+use Illuminate\Http\Request;
+use App\Utilisateur;
+
+class FunctionUse
+{
+    public static function GetUser($email,$motpass){
+        $user=new Utilisateur;
+        $user=Utilisateur::whereEmailAndMotpass($email,sha1($motpass))->get();
+        return $user;
+    }
+    public static function isAdmin($email,$motpass){
+        $user=new Utilisateur;
+        $user=Utilisateur::whereEmailAndMotpass($email,sha1($motpass))->get();
+        if(count($user)){
+            if($user[0]->type_utilisateur='a'){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+}
