@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Etudiant;
+use App\Note;
 use App\Utilisateur;
 use App\FunctionUse;
 use Illuminate\Http\Request;
@@ -18,18 +19,17 @@ class EtudiantController extends Controller
      */
     public function Add(Request $request)
     {
-        $user=FunctionUse::GetUser($request['email'],$request['motpass']);
-        if(count($user)>0){
-            if($user[0]->type_utilisateur=='a'){
+        $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
+        if($user){
                 $useretud=new Utilisateur;
                 Utilisateur::insert([
                     'nom'=>$request['nom'],
                     'prenom'=>$request['prenom'],
                     'email'=>$request['email_etud'],
-                    'motpass'=>sha1($request['motpass']),
+                    'motpass'=>sha1($request['motpass_etud']),
                     'type_utilisateur'=>'d'
                 ]);
-                $useretud=Utilisateur::whereEmailAndMotpass($request['email_etud'],sha1($request['motpass']))->get();
+                $useretud=Utilisateur::whereEmailAndMotpass($request['email_etud'],sha1($request['motpass_etud']))->get();
                 Etudiant::insert([
                     'date_ns'=>$request['date_ns'],
                     'lieu_ns'=>$request['lieu_ns'],
@@ -42,12 +42,6 @@ class EtudiantController extends Controller
                     'status'=>'succus',
                     'data'=>"l'etudiant et bien inscrire"
                 ]);
-            }else{
-                return response([
-                    'status'=>'err',
-                    'data'=>'vous pouvez pas faire cette opération'
-                ]);
-            }
         }else{
             return response([
                 'status'=>'err',
@@ -56,18 +50,6 @@ class EtudiantController extends Controller
         }
         
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      *
@@ -78,42 +60,56 @@ class EtudiantController extends Controller
     {
      if(FunctionUse::isAdmin($request['email'],$request['motpass'])){
         $user=Utilisateur::whereType_utilisateur('d')
-            ->join('etudiant','etudiant.utilisateur_idutilisateur','utilisateur.idutilisateur')
+            ->join('etudiant','etudiant.utilisateur_idutilisateur','=','utilisateur.idutilisateur')
             ->get();
-         
+        return response([
+            'status'=>'succus',
+            'data'=>$user[0]
+        ]);
+     }else{
+        return response([
+            'status'=>'erreur',
+            'data'=>'vous pouvez pas faire cette operation'
+        ]);
      }
     }
     /**
-     * Show the form for editing the specified resource.
+     * GetIdetudiant
      *
-     * @param  \App\Etudiant  $etudiant
-     * @return \Illuminate\Http\Response
+     * @param  mixed $email
+     * @param  mixed $motpass
+     *
+     * @return void
      */
-    public function edit(Etudiant $etudiant)
-    {
-        //
+    public function GetIdetudiant($email,$motpass){
+        $id=Utilisateur::whereType_utilisateurAndEmailAndMotpass('d',$email,$motpass)
+            ->join('etudiant','etudiant.utilisateur_idutilisateur','=','utilisateur.idutilisateur')
+            ->get();
+        return $id[0];
     }
-
     /**
-     * Update the specified resource in storage.
+     * Display the specified resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Etudiant  $etudiant
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Etudiant $etudiant)
+    public function mesnote(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Etudiant  $etudiant
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Etudiant $etudiant)
-    {
-        //
+        $idetudiant=GetIdetudiant($request['email'],$request['motpass']);
+        $note=Note::whereEtudiant_idetudiant($idetudiant->idetudiant)
+            ->join('module','note.module_idmodule','=','module.idmodule')
+            ->where('module.annee','=',$idetudiant->annee)
+            ->get();
+        if(count($note)>0){
+            return response([
+                'status'=>'succus',
+                'data'=>$note[0]
+            ]);
+        }else{
+            return response([
+                'status'=>'erreur',
+                'data'=>null
+            ]);
+        }
     }
 }
