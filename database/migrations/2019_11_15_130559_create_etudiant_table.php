@@ -15,7 +15,7 @@ class CreateEtudiantTable extends Migration
     {
         Schema::create('etudiant', function (Blueprint $table) {
             $table->increments('idetudiant');
-            $table->date('date_ns');
+            $table->string('date_ns');
             $table->string('lieu_ns');
             $table->string('groupe');
             $table->string('annee');

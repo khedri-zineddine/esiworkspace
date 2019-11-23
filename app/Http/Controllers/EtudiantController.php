@@ -26,16 +26,16 @@ class EtudiantController extends Controller
                     'nom'=>$request['nom'],
                     'prenom'=>$request['prenom'],
                     'email'=>$request['email_etud'],
-                    'motpass'=>sha1($request['motpass_etud']),
+                    'motpass'=>sha1($request['email_etud']),
                     'type_utilisateur'=>'d'
                 ]);
-                $useretud=Utilisateur::whereEmailAndMotpass($request['email_etud'],sha1($request['motpass_etud']))->get();
+                $useretud=Utilisateur::whereEmailAndMotpass($request['email_etud'],sha1($request['email_etud']))->get();
                 Etudiant::insert([
                     'date_ns'=>$request['date_ns'],
                     'lieu_ns'=>$request['lieu_ns'],
-                    'groupe'=>$request['group'],
-                    'annee'=>$request['anne'],
-                    'section'=>$request['sec'],
+                    'groupe'=>$request['groupe'],
+                    'annee'=>$request['annee'],
+                    'section'=>$request['section'],
                     'utilisateur_idutilisateur'=>$useretud[0]->idutilisateur
                 ]);
                 return response([
@@ -49,29 +49,6 @@ class EtudiantController extends Controller
             ]);
         }
         
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request)
-    {
-     if(FunctionUse::isAdmin($request['email'],$request['motpass'])){
-        $user=Utilisateur::whereType_utilisateur('d')
-            ->join('etudiant','etudiant.utilisateur_idutilisateur','=','utilisateur.idutilisateur')
-            ->get();
-        return response([
-            'status'=>'succus',
-            'data'=>$user[0]
-        ]);
-     }else{
-        return response([
-            'status'=>'erreur',
-            'data'=>'vous pouvez pas faire cette operation'
-        ]);
-     }
     }
     /**
      * GetIdetudiant

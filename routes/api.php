@@ -18,3 +18,5 @@ Route::post('/etudiant/show','EtudiantController@show');
 Route::post('/etudiant/mesnote','EtudiantController@mesnote');
 Route::post('/enseignent/add','EnseignentController@add');
 Route::post('/enseignent/addnote','EnseignentController@addnote');
+Route::post('/module/add','ModuleController@add');
+Route::post('/enseignent/list','EnseignentController@getlist');

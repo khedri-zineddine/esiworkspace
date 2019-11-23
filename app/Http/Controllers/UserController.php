@@ -15,7 +15,7 @@ class UserController extends Controller
                 'email' => $loginvalid[0]->email,
                 'nom' => $loginvalid[0]->nom,
                 'prenom' => $loginvalid[0]->prenom,
-                'data-user' => $loginvalid[0]->type_utilisateur,
+                'data_user' => $loginvalid[0]->type_utilisateur,
                 'motpass' => $Request['motpass']
             ];
         }else{
