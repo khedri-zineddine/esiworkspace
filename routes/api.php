@@ -20,3 +20,4 @@ Route::post('/enseignent/add','EnseignentController@add');
 Route::post('/enseignent/addnote','EnseignentController@addnote');
 Route::post('/module/add','ModuleController@add');
 Route::post('/enseignent/list','EnseignentController@getlist');
+Route::get('/module/getmodule','ModuleController@getmodule');

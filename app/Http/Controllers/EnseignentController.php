@@ -16,8 +16,7 @@ class EnseignentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function add(Request $request)
-    {
+    public function add(Request $request){
         $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
         if($user){
                 $userens=new Utilisateur;
@@ -75,31 +74,18 @@ class EnseignentController extends Controller
                 ->join('etudiant','etudiant.utilisateur_idutilisateur','=','utilisateur.idutilisateur')
                 ->get();
             if(isset($etud[0]->idetudiant)){
-                $ixsitnote=Note::WhereEtudiant_idetudiant($etud[0]->idetudiant)->get();
-                if(count($ixsitnote[0])>0){
-                    if($request['exam']=='td'){
-                        $ixsitnote->td=$request['note'];
-                    }else if($request['exam']=='cntrl_intr'){
-                        $ixsitnote->cntrl_intr=$request['note'];
-                    }else if($request['exam']=='cntrl_final'){
-                        $ixsitnote->cntrl_final=$request['note'];
-                    }
-                    $ixsitnote->save();
-                    return response([
-                        'status'=>'succus',
-                        'data'=>'la note et bien afficher au etudiant'
-                    ]);
-                }else{
-                    Note::insert([
+                Note::updateOrInsert([
+                        'etudiant_idetudiant' =>$etud[0]->idetudiant,
+                        'module_idmodule'=>$request['idmodule']
+                    ],[
                         'etudiant_idetudiant'=>$etud[0]->idetudiant,
                         'module_idmodule'=>$request['idmodule'],
-                        "'".$request['exam']."'"=>$request['note']
+                        $request['exam']=>$request['note']
                     ]);
-                    return response([
-                        'status'=>'succus',
-                        'data'=>'la note et bien afficher au etudiant'
-                    ]);
-                }
+                return response([
+                    'status'=>'erreur',
+                    'data'=>"la note et bien envoyer a l'etudinat"
+                ]); 
             }else{
                 return response([
                     'status'=>'erreur',
@@ -113,5 +99,4 @@ class EnseignentController extends Controller
             ]);
         }
     }
-    
 }

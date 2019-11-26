@@ -13,8 +13,7 @@ class ModuleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function add(Request $request)
-    {
+    public function add(Request $request){
         $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
         if($user){
             Module::insert([
@@ -33,5 +32,16 @@ class ModuleController extends Controller
                 'data'=>'vous avez pas le droir pour faire cette operation'
             ]);
         }
+    }
+    public function getmodule(Request $request){
+        $modules=Module::all();
+        $result='';
+        foreach($modules as $module){
+            $result=$result.'<option value="'.$module->idmodule.'">'.$module->nommodule.'</option>';
+        }
+        return response([
+            'status'=>'succus',
+            'data'=>$result
+        ]);
     }
 }

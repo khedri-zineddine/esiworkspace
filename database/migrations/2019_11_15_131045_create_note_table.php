@@ -15,9 +15,9 @@ class CreateNoteTable extends Migration
     {
         Schema::create('note', function (Blueprint $table) {
             $table->increments('idnote');
-            $table->string('cntrl_intr');
-            $table->string('cntrl_final');
-            $table->string('td');
+            $table->string('cntrl_intr',60)->nullable();
+            $table->string('cntrl_final',60)->nullable();
+            $table->string('td',60)->nullable();
         });
     }
 
