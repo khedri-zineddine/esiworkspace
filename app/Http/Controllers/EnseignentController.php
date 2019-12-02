@@ -11,10 +11,13 @@ use Illuminate\Http\Request;
 
 class EnseignentController extends Controller
 {
+    
     /**
-     * Show the form for creating a new resource.
+     * premetre au admin d'ajouter un enseignent
      *
-     * @return \Illuminate\Http\Response
+     * @param  mixed $request['nom','prenom','email_ens','date_ns','date_recrt','grade']
+     *
+     * @return void
      */
     public function add(Request $request){
         $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
@@ -45,6 +48,14 @@ class EnseignentController extends Controller
                 ]);
             }
     }
+    /**
+     * getlist service qui premetre au enseignent d'aubtenir la list des étudinats d'un année donneret un examen  par lui pour affectuer l'affichage des notes
+     * la liste se donne dans un fichier excel
+     *
+     * @param  mixed $request['anneafich','exam_afich']
+     *
+     * @return void les donner de fichier excel
+     */
     public function getlist(Request $request){
         $user=FunctionUse::isEnseignent($request['email'],$request['motpass']);
         if($user && !empty($request['anneafich']) && !empty($request['exam_afich'])){
@@ -67,6 +78,13 @@ class EnseignentController extends Controller
                 ]);
             }
     }
+    /**
+     * addnote service qui envoyer un note d'une examen (td,ci,cf) d'une module choiser pour un étudiant 
+     *
+     * @param  mixed $request['email_etud','idmodule','exam','note']
+     *
+     * @return void
+     */
     public function addnote(Request $request){
         $ens=FunctionUse::isEnseignent($request['email'],$request['motpass']);
         if($ens){

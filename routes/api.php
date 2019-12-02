@@ -21,3 +21,8 @@ Route::post('/enseignent/addnote','EnseignentController@addnote');
 Route::post('/module/add','ModuleController@add');
 Route::post('/enseignent/list','EnseignentController@getlist');
 Route::get('/module/getmodule','ModuleController@getmodule');
+Route::post('/message/movfile','MessageController@movfile');
+Route::post('/message/sentmsg','MessageController@sentmsg');
+Route::post('/message/inbox','MessageController@inbox');
+Route::post('/message/sent','MessageController@sent');
+Route::post('/message/slctmsg','MessageController@slctmsg');

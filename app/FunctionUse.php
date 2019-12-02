@@ -38,4 +38,13 @@ class FunctionUse
             return false;
         }
     }
+    public static function isUser($email){
+        $user=new Utilisateur;
+        $user=Utilisateur::whereEmail($email)->get();
+        if(count($user)>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

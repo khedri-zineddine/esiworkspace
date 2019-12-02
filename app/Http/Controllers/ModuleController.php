@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function add(Request $request){
         $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
         if($user){

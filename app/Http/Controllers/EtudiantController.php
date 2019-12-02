@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Hash;
 class EtudiantController extends Controller
 {
     /**
-     * creating a new etudiant.
+     * service qui permetre au admin d'ajouter un étudiant
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request['nom','prenom','email_etud','date_ns','lieu_ns','groupe','annee','section']
      * @return \Illuminate\Http\Response
      */
     public function Add(Request $request){
@@ -51,13 +51,12 @@ class EtudiantController extends Controller
         
     }
     /**
-     * Display the specified resource.
+     * service pour recuperer les notes d'un étudiant pour lui année actteulle
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $request['email','motpass']
      * @return \Illuminate\Http\Response
      */
-    public function mesnote(Request $request)
-    {
+    public function mesnote(Request $request){
         $idetudiant=Utilisateur::whereType_utilisateurAndEmailAndMotpass('d',$request['email'],sha1($request['motpass']))
         ->join('etudiant','etudiant.utilisateur_idutilisateur','=','utilisateur.idutilisateur')
         ->get();
