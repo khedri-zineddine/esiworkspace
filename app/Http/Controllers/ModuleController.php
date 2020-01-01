@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
+    /**
+     * add:
+     * service pour ajouter une module 
+     *
+     * @param  mixed $request['nommodule','coff','annee','semestre']
+     *
+     * @return void
+     */
     public function add(Request $request){
         $user=FunctionUse::isAdmin($request['email'],$request['motpass']);
         if($user){
@@ -28,6 +36,14 @@ class ModuleController extends Controller
             ]);
         }
     }
+    /**
+     * getmodule:
+     * service pour recuperer la list des modules 
+     *
+     * @param  mixed $request
+     *
+     * @return void
+     */
     public function getmodule(Request $request){
         $modules=Module::all();
         $result='';
@@ -37,6 +53,6 @@ class ModuleController extends Controller
         return response([
             'status'=>'succus',
             'data'=>$result
-        ]);
+        ],200);
     }
 }
