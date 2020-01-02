@@ -57,8 +57,5 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
-    },
-    "require-dev": {
-        "phpdocumentor/phpdocumentor": "2.*"
     }
 }
